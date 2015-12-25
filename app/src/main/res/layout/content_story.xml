@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.drillin.oindrildutta.istory.StoryActivity"
+    tools:showIn="@layout/activity_story"
+    android:background="#ffffff">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/storyImg"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/page0"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/storyChoiceA"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/storyChoiceB"
+        android:layout_alignEnd="@+id/storyChoiceB"
+        android:background="#ffffff"
+        android:stateListAnimator="@null"
+        android:textColor="#ff3a8aec"
+        android:textSize="18sp"
+        android:layout_marginBottom="25dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/storyChoiceB"
+        android:layout_above="@+id/storyChoiceA"
+        android:layout_centerHorizontal="true"
+        android:background="#ffffff"
+        android:stateListAnimator="@null"
+        android:textColor="#ff3a8aec"
+        android:textSize="18sp"
+        android:layout_marginBottom="22dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="You continue your course to Earth. Two days later, you recieve a transmission from HQ saying that they have detected some sort of anomaly on the surface of Mars near an abandoned rover. They ask you to investigate, but ultimately the decision is yours beccause your mission has already run much longer than planned and supplies are low."
+        android:id="@+id/storyText"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/storyChoiceB"
+        android:layout_below="@+id/storyImg"
+        android:paddingLeft="30dp"
+        android:paddingTop="30dp"
+        android:paddingRight="30dp"
+        android:lineSpacingMultiplier="1.2"
+        android:textAlignment="center"
+        android:textSize="23sp"
+        android:password="false"
+        android:phoneNumber="false"
+        android:textIsSelectable="false" />
+</RelativeLayout>
