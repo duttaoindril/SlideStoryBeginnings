@@ -1,10 +1,10 @@
 package com.drillin.oindrildutta.istory;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,8 +13,14 @@ import android.widget.Toast;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+    //private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String PREFS_FILE = " com.drillin.sharedpreferencesapp.preferences";
+    private static final String KEY_NAME = "savedName";
+    private SharedPreferences.Editor prefEditor;
     private HashMap<String, SlideChunk> story;
+    private EditText nameField;
+
+    //https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html#foreground.type=image&foreground.space.trim=0&foreground.space.pad=0&foreColor=fff%2C0&crop=0&backgroundShape=square&backColor=ff9800%2C100&effects=score
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -30,29 +36,54 @@ public class MainActivity extends AppCompatActivity {
         story.put("5", new SlideChunk("5", "", R.drawable.page5, "After a long walk slightly uphill, you end up at the top of a small crater. You look around, and are overjoyed to see your favorite android, %1$s-S1124. It had been lost on a previous mission to Mars! You take it back to your ship and fly back to Earth.", "", ""));
         story.put("6", new SlideChunk("6", "", R.drawable.page6, "You arrive home on Earth. While your mission was a success, you forever wonder what was sending that signal. Perhaps a future mission will be able to investigate...", "", ""));
 
-        final EditText nameField = (EditText)findViewById(R.id.editText);
-        final Button startButton = (Button)findViewById(R.id.startButton);
+        nameField = (EditText)findViewById(R.id.editText);
+        Button startButton = (Button)findViewById(R.id.startButton);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
+        prefEditor = sharedPreferences.edit();
 
         if(getIntent().getStringExtra("name") != null)
             nameField.setText(getIntent().getStringExtra("name"));
+
+        nameField.setText(sharedPreferences.getString(KEY_NAME, ""));
+        prefEditor.clear();
+        prefEditor.apply();
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String name = nameField.getText().toString();
-                if(name.length() > 2) {
+                if (name.length() > 2) {
                     for (HashMap.Entry<String, SlideChunk> entry : story.entrySet())
                         story.put(entry.getKey(), entry.getValue().setCharacters(name));
                     Intent i = new Intent(getApplicationContext(), StoryActivity.class);
                     i.putExtra("slidestory", story);
                     i.putExtra("chunkid", "0");
                     startActivity(i);
-                }
-                else if(name.length() == 0)
+                } else if (name.length() == 0)
                     Toast.makeText(getApplicationContext(), "Please enter a name!", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(getApplicationContext(), "Please enter an ACTUAL name!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        prefEditor.putString(KEY_NAME, nameField.getText().toString());
+        prefEditor.apply();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_NAME, nameField.getText().toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        nameField.setText(savedInstanceState.getString(KEY_NAME));
     }
 }
